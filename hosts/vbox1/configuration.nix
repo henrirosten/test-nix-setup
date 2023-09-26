@@ -8,6 +8,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common.nix
+    ../../modules/hydra/hydra.nix
   ];
 
   virtualisation.virtualbox.guest.enable = true;
@@ -19,4 +20,17 @@
 
   # Define hostname
   networking.hostName = "vbox1";
+
+  # Systemd service to start VBoxClient-all 
+  systemd.services.vbox-client-start = {
+    description = "Service to start VBoxClient-all";
+    serviceConfig.Type = "oneshot";
+    serviceConfig.RemainAfterExit = true;
+    wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [ config.boot.kernelPackages.virtualboxGuestAdditions ];
+    script = ''
+      set -x
+      VBoxClient-all
+    '';
+  };
 }
