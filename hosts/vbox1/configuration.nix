@@ -1,10 +1,13 @@
 # This is your system's configuration file.
 # Use this to configure your system environment
 # (it replaces /etc/nixos/configuration.nix)
-
-{ inputs, lib, config, pkgs, ... }: 
-
 {
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ../common.nix
@@ -21,13 +24,13 @@
   # Define hostname
   networking.hostName = "vbox1";
 
-  # Systemd service to start VBoxClient-all 
+  # Systemd service to start VBoxClient-all
   systemd.services.vbox-client-start = {
     description = "Service to start VBoxClient-all";
     serviceConfig.Type = "oneshot";
     serviceConfig.RemainAfterExit = true;
-    wantedBy = [ "multi-user.target" ];
-    path = with pkgs; [ config.boot.kernelPackages.virtualboxGuestAdditions ];
+    wantedBy = ["multi-user.target"];
+    path = with pkgs; [config.boot.kernelPackages.virtualboxGuestAdditions];
     script = ''
       set -x
       VBoxClient-all

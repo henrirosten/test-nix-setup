@@ -1,7 +1,10 @@
-{ inputs, lib, config, pkgs, ... }: 
-
 {
-
+  inputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../users/hrosten.nix
     ../users/tester.nix
@@ -31,7 +34,7 @@
 
   # Select internationalisation properties
   i18n.defaultLocale = "en_US.UTF-8";
-  
+
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "fi_FI.UTF-8";
     LC_IDENTIFICATION = "fi_FI.UTF-8";
@@ -43,7 +46,7 @@
     LC_TELEPHONE = "fi_FI.UTF-8";
     LC_TIME = "fi_FI.UTF-8";
   };
-  
+
   # Enable the X11 windowing system
   services.xserver.enable = true;
 
@@ -62,13 +65,18 @@
 
   # List packages installed in system profile
   environment.systemPackages = with pkgs; [
-    wget curl vim git htop nix-info
+    wget
+    curl
+    vim
+    git
+    htop
+    nix-info
   ];
 
   # Shell
   programs.bash.enableCompletion = true;
   programs.fish.enable = true;
-  
+
   # Disable ssh askpass
   programs.ssh.askPassword = "";
 

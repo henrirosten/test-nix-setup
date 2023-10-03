@@ -1,23 +1,26 @@
-{ lib, pkgs, config, ...}:
-let
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
   localMachine = pkgs.writeTextFile {
     name = "local";
     text = ''
-localhost x86_64-linux - 8 2 kvm,benchmark,big-parallel,nixos-test - -
+      localhost x86_64-linux - 8 2 kvm,benchmark,big-parallel,nixos-test - -
     '';
   };
   createDeclarativeProjectScript = pkgs.stdenv.mkDerivation {
     name = "create-declarative-project";
     unpackPhase = ":";
-    buildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [pkgs.makeWrapper];
     installPhase = "install -m755 -D ${./create-declarative-project.sh} $out/bin/create-declarative-project";
     postFixup = ''
       wrapProgram "$out/bin/create-declarative-project" \
-        --prefix PATH ":" ${lib.makeBinPath [ pkgs.curl ]}
+        --prefix PATH ":" ${lib.makeBinPath [pkgs.curl]}
     '';
   };
-in
-{
+in {
   services.hydra = {
     enable = true;
     port = 3000;
@@ -31,7 +34,7 @@ in
     ];
 
     extraConfig = ''
-      max_output_size = ${ builtins.toString (32 * 1024 * 1024 * 1024) };
+      max_output_size = ${builtins.toString (32 * 1024 * 1024 * 1024)};
     '';
   };
 
@@ -40,16 +43,15 @@ in
   ];
 
   services.postgresql = {
-      enable = true;
-      package = pkgs.postgresql_14;
-      identMap =
-        ''
-          hydra-users hydra hydra
-          hydra-users hydra-queue-runner hydra
-          hydra-users hydra-www hydra
-          hydra-users root postgres
-          hydra-users postgres postgres
-        '';
+    enable = true;
+    package = pkgs.postgresql_14;
+    identMap = ''
+      hydra-users hydra hydra
+      hydra-users hydra-queue-runner hydra
+      hydra-users hydra-www hydra
+      hydra-users root postgres
+      hydra-users postgres postgres
+    '';
   };
 
   # delete build logs older than 30 days
@@ -63,11 +65,11 @@ in
     description = "Hydra Manual Setup";
     serviceConfig.Type = "oneshot";
     serviceConfig.RemainAfterExit = true;
-    wantedBy = [ "multi-user.target" ];
-    requires = [ "hydra-init.service" ];
-    after = [ "hydra-init.service" ];
+    wantedBy = ["multi-user.target"];
+    requires = ["hydra-init.service"];
+    after = ["hydra-init.service"];
     environment = builtins.removeAttrs (config.systemd.services.hydra-init.environment) ["PATH"];
-    path = with pkgs; [ config.services.hydra.package netcat ];
+    path = with pkgs; [config.services.hydra.package netcat];
     script = ''
       if [ -e ~hydra/.setup-is-complete ]; then
         exit 0

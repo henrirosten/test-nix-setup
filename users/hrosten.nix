@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   users.users = {
     hrosten = {
       initialPassword = "changemeonfirstlogin";

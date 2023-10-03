@@ -1,6 +1,4 @@
-{ ... }:
-
-{
+{...}: {
   users.users = {
     tester = {
       initialPassword = "changemeonfirstlogin";
