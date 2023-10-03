@@ -1,0 +1,10 @@
+keys:
+  - &hrosten age1hc6hszepd5xezxkgd3yx74pn3scxjm5w6px48m4rq9yj7w6rke7q72zhgn
+  - &vbox1 age1jwmrk87ez6ffe6qqz55uvnss8ulpjpmf25xue6eyuldhluepxqcs5xrnfy
+creation_rules:
+  - path_regex: secrets.yaml$
+    key_groups:
+    - age:
+      - *hrosten
+      - *vbox1
+

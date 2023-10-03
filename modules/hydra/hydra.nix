@@ -87,9 +87,7 @@ in {
       /run/current-system/sw/bin/chown -R hydra-queue-runner:hydra /var/lib/hydra/cache
 
       # create admin user
-      # TODO: use secrets instead of plain-text passwords!
-      # https://github.com/nix-community/infra/blob/d51d748ae8b9a1d163364da45c9f2b9863b4c67e/modules/nixos/hydra.nix#L108
-      export HYDRA_ADMIN_PASSWORD="thisgoestosecrets"
+      export HYDRA_ADMIN_PASSWORD=$(cat ${config.sops.secrets.hydra-admin-password.path})
       ${config.services.hydra.package}/bin/hydra-create-user admin --password "$HYDRA_ADMIN_PASSWORD" --role admin
 
       # wait for hydra service

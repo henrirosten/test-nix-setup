@@ -8,6 +8,8 @@
   pkgs,
   ...
 }: {
+  sops.defaultSopsFile = ./secrets.yaml;
+  sops.secrets.hydra-admin-password.owner = "hydra";
   imports = [
     ./hardware-configuration.nix
     ../common.nix
@@ -23,17 +25,4 @@
 
   # Define hostname
   networking.hostName = "vbox1";
-
-  # Systemd service to start VBoxClient-all
-  systemd.services.vbox-client-start = {
-    description = "Service to start VBoxClient-all";
-    serviceConfig.Type = "oneshot";
-    serviceConfig.RemainAfterExit = true;
-    wantedBy = ["multi-user.target"];
-    path = with pkgs; [config.boot.kernelPackages.virtualboxGuestAdditions];
-    script = ''
-      set -x
-      VBoxClient-all
-    '';
-  };
 }
