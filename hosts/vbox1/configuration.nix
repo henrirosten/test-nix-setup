@@ -10,10 +10,12 @@
 }: {
   sops.defaultSopsFile = ./secrets.yaml;
   sops.secrets.hydra-admin-password.owner = "hydra";
+  sops.secrets.ssh-host-ed25519-key.owner = "root";
   imports = [
     ./hardware-configuration.nix
     ../common.nix
     ../../modules/hydra/hydra.nix
+    ../../modules/openssh/openssh.nix
   ];
 
   virtualisation.virtualbox.guest.enable = true;
