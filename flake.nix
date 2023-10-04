@@ -10,11 +10,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-stable.follows = "nixpkgs";
     };
+    # Binary cache with nix-serve-ng
+    nix-serve-ng = {
+      url = github:aristanetworks/nix-serve-ng;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
     nixpkgs,
     sops-nix,
+    nix-serve-ng,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -39,7 +45,11 @@
       # Configuration for host 'vbox1'
       vbox1 = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        modules = [./hosts/vbox1/configuration.nix sops-nix.nixosModules.sops];
+        modules = [
+          nix-serve-ng.nixosModules.default
+          sops-nix.nixosModules.sops
+          ./hosts/vbox1/configuration.nix
+        ];
       };
       # Available through 'nixos-rebuild switch --flake .#laptop'
       # Configuration for host 'laptop'
