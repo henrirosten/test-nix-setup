@@ -54,4 +54,6 @@ To get started, use an existing configuration as a template such as: https://git
 
 ## Acknowledgements
 
-Inspired by https://github.com/Misterio77/nix-starter-configs.
+- https://github.com/Misterio77/nix-starter-configs
+- https://github.com/nix-community/infra
+- https://samleathers.com/posts/2022-02-11-my-new-network-and-sops.html

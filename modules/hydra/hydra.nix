@@ -10,13 +10,13 @@
       localhost x86_64-linux - 8 2 kvm,benchmark,big-parallel,nixos-test - -
     '';
   };
-  createDeclarativeProjectScript = pkgs.stdenv.mkDerivation {
-    name = "create-declarative-project";
+  createJobsetsScript = pkgs.stdenv.mkDerivation {
+    name = "create-jobsets";
     unpackPhase = ":";
     buildInputs = [pkgs.makeWrapper];
-    installPhase = "install -m755 -D ${./create-declarative-project.sh} $out/bin/create-declarative-project";
+    installPhase = "install -m755 -D ${./create-jobsets.sh} $out/bin/create-jobsets";
     postFixup = ''
-      wrapProgram "$out/bin/create-declarative-project" \
+      wrapProgram "$out/bin/create-jobsets" \
         --prefix PATH ":" ${lib.makeBinPath [pkgs.curl]}
     '';
   };
@@ -96,14 +96,7 @@ in {
       done
 
       # create hydra jobsets
-      export DECL_PROJECT_NAME="declarative-hydra-example"
-      export DECL_DISPLAY_NAME="Illustrate declarative hydra projects"
-      export DECL_VALUE="https://github.com/shlevy/declarative-hydra-example"
-      export DECL_TYPE="git"
-      export DECL_FILE="spec.json"
-      export DECL_DESCRIPTION="An example illustrating declarative hydra projects"
-      export DECL_HOMEPAGE="https://github.com/shlevy/declarative-hydra-example"
-      ${createDeclarativeProjectScript}/bin/create-declarative-project
+      ${createJobsetsScript}/bin/create-jobsets
 
       # done
       touch ~hydra/.setup-is-complete
