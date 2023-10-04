@@ -4,7 +4,9 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  asGB = size: toString (size * 1024 * 1024 * 1024);
+in {
   imports = [
     ../users/hrosten.nix
     ../users/tester.nix
@@ -23,7 +25,25 @@
     settings = {
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
+      # Subsituters
+      trusted-public-keys = [
+        "cache.vedenemo.dev:RGHheQnb6rXGK5v9gexJZ8iWTPX6OcSeS56YeXYzOcg="
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      ];
+      substituters = [
+        "https://cache.vedenemo.dev"
+        "https://cache.nixos.org"
+      ];
+      # Auto-free the /nix/store:
+      # free up to 50GB whenever there is less than 30GB left:
+      min-free = asGB 30;
+      max-free = asGB 50;
+      # check the free disk space every 10 seconds
+      min-free-check-interval = 10;
     };
+    # Garbage collection
+    gc.automatic = true;
+    gc.options = pkgs.lib.mkDefault "--delete-older-than 14d";
   };
 
   # Enable networking
