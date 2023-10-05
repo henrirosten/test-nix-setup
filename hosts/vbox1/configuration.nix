@@ -12,12 +12,15 @@
   sops.secrets.hydra-admin-password.owner = "hydra";
   sops.secrets.ssh-host-ed25519-key.owner = "root";
   sops.secrets.cache-sig-key.owner = "root";
+
   imports = [
     ./hardware-configuration.nix
     ../common.nix
     ../../modules/hydra/hydra.nix
     ../../modules/openssh/openssh.nix
     ../../modules/binarycache/binary-cache.nix
+    ../../users/hrosten.nix
+    ../../users/tester.nix
   ];
 
   virtualisation.virtualbox.guest.enable = true;

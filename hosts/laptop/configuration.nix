@@ -11,6 +11,7 @@
   imports = [
     ./hardware-configuration.nix
     ../common.nix
+    ../../users/hrosten.nix
   ];
 
   # Bootloader

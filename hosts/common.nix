@@ -7,11 +7,6 @@
 }: let
   asGB = size: toString (size * 1024 * 1024 * 1024);
 in {
-  imports = [
-    ../users/hrosten.nix
-    ../users/tester.nix
-  ];
-
   nixpkgs.config.allowUnfree = true;
 
   nix = {
@@ -35,15 +30,22 @@ in {
         "https://cache.nixos.org"
       ];
       # Auto-free the /nix/store:
-      # free up to 50GB whenever there is less than 30GB left:
-      min-free = asGB 30;
-      max-free = asGB 50;
+      #
+      # Ref:
+      # https://nixos.wiki/wiki/Storage_optimization#Automation
+      # https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-min-free
+      #
+      # When free disk space in /nix/store drops below min-free during build,
+      # perform a garbage-collection until max-free bytes are available or there
+      # is no more garbage.
+      min-free = asGB 20;
+      max-free = asGB 60;
       # check the free disk space every 10 seconds
       min-free-check-interval = 10;
     };
     # Garbage collection
     gc.automatic = true;
-    gc.options = pkgs.lib.mkDefault "--delete-older-than 14d";
+    gc.options = pkgs.lib.mkDefault "--delete-older-than 60d";
   };
 
   # Enable networking
