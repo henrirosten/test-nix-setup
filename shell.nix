@@ -16,6 +16,7 @@
     nativeBuildInputs = with pkgs; [
       nix
       home-manager
+      vim
       git
       sops
       ssh-to-age

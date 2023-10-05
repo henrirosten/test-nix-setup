@@ -10,8 +10,9 @@
 }: {
   sops.defaultSopsFile = ./secrets.yaml;
   sops.secrets.hydra-admin-password.owner = "hydra";
-  sops.secrets.ssh-host-ed25519-key.owner = "root";
   sops.secrets.cache-sig-key.owner = "root";
+  # TODO: needs more testing as to how this would work with sops
+  # sops.secrets.ssh-host-ed25519-key.owner = "root";
 
   imports = [
     ./hardware-configuration.nix

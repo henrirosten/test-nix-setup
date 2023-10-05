@@ -61,7 +61,7 @@ cat >data.json <<EOF
   "description": "Ghaf main",
   "type": 1,
   "visible": 1,
-  "enabled": 1,
+  "enabled": 0,
   "checkinterval": 60,
   "schedulingshares": 10,
   "emailoverride": "",
