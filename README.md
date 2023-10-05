@@ -5,9 +5,9 @@ Example NixOS Configuration using flakes.
 ### Highlights
 Example flakes-based NixOS configurations for host profiles '**vbox1**' and '**laptop**':
 - '**vbox1**' includes the following configuration:
-    - hydra: using [ghaf](https://github.com/tiiuae/ghaf) jobset as an example
+    - hydra: using [ghaf](https://github.com/tiiuae/ghaf) jobset as an example (currently [disabled](./modules/hydra/create-jobsets.sh) by default)
     - binary cache: with [nix-serve-ng](https://github.com/aristanetworks/nix-serve-ng) signing packages that can be verified with public key: `cache.vbox1:/hvpES9H9KQ24QyxWl6kg+AUhFu/9zsVu8+XePhnL3k=`.
-    - automatic nix store garbage collection: when free disk space in `/nix/store` drops below threshold value, automatically remove garbage
+    - automatic nix store garbage collection: when free disk space in `/nix/store` drops below [threshold value](./hosts/common.nix) automatically remove garbage
     - openssh server
     - pre-defined users: allow ssh access for a set of users based on ssh public keys
     - secrets: uses [sops-nix](https://github.com/Mic92/sops-nix) to manage secrets - secrets, such as hydra admin password and binary cache signing key, are stored encrypted based on host ssh key
@@ -165,6 +165,14 @@ $ grep -r vbox1 hosts/myhost/
 hosts/myhost/configuration.nix:  networking.hostName = "vbox1";
 #                                   Replace with myhost ^^^^^
 ```
+
+Ensure the boot.loader configuration in `hosts/myhost/configuration.nix` is what you expect. If you are already running NixOS, check the existing configuration in `/etc/nixos/configuration.nix`:
+```bash
+$ grep boot.loader /etc/nixos/configuration.nix
+boot.loader.grub.enable = true;
+boot.loader.grub.device = "/dev/sda";
+```
+
 While editing the `hosts/myhost/configuration.nix`, you might want to remove some of the configured services, or add your own services based on what you are planning to use the server for. For instance, if you don't want to configure hydra for your host, simply remove the line that imports `../../modules/hydra/hydra.nix`.
 
 #### Generate and encrypt your secrets
